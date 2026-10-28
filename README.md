@@ -4,20 +4,32 @@
 
 # DYXY Perps
 
-How DYXY perpetual futures work: two interfaces on the Aster engine with up to 100x leverage, and Degen mode on Hyperliquid with up to 1000x on BTC and ETH.
+How DYXY perpetual futures work: two execution engines on Aster, a liquidity pool (V1) and an order book (V2), both with up to 100x leverage, plus Degen mode, a liquidity pool on Hyperliquid with up to 1000x on BTC and ETH.
 
 > This repository describes how the product works. It does not contain DYXY source code. User guide: [docs.dyxy.io/trade/perps](https://docs.dyxy.io/trade/perps/overview).
+
+## Execution models
+
+V1, V2 and Degen mode differ in **how a trade is executed**:
+
+| | Liquidity pool (V1, Degen mode) | Order book (V2) |
+| --- | --- | --- |
+| Counterparty | A liquidity pool | Other traders |
+| Execution price | Oracle price of the asset | Best matched price in the book |
+| Depends on book depth | No | Yes |
+| Price for PnL and liquidation | Oracle price | Mark price |
 
 ## Modes at a glance
 
 | | V1 | V2 | Degen mode |
 | --- | --- | --- | --- |
-| Interface | Simplified | Professional terminal | Simplified, inside V1 |
+| Execution | Liquidity pool | Order book | Liquidity pool |
 | Engine | Aster | Aster | Hyperliquid (HyperEVM) |
 | Markets | All listed | All listed | BTC and ETH |
 | Max leverage | 100x | 100x | 1000x |
 | Orders | Market, TP/SL | Market, limit, stop market, stop limit, TP/SL | Market, TP/SL |
 | Order options | — | GTC, IOC, reduce only | — |
+| Margin modes | Per position | Cross or isolated | Per position |
 | Balance | Perps balance | Perps balance | Degen balance |
 
 ```mermaid
@@ -26,31 +38,31 @@ flowchart LR
     W -- deposit / withdraw --> PB["Perps balance"]
     W -- deposit / withdraw --> DB["Degen balance"]
 
-    subgraph ASTER["Aster engine"]
-        V1["V1<br/>simple"]
-        V2["V2<br/>pro terminal"]
+    subgraph ASTER["Aster"]
+        V1["V1<br/>liquidity pool"]
+        V2["V2<br/>order book"]
     end
-    subgraph HL["Hyperliquid engine"]
-        DG["Degen mode<br/>BTC · ETH · 1000x"]
+    subgraph HL["Hyperliquid (HyperEVM)"]
+        DG["Degen mode<br/>liquidity pool<br/>BTC · ETH · 1000x"]
     end
 
     PB --> V1
     PB --> V2
-    V1 -. same positions .- V2
     DB --> DG
 ```
 
-V1 and V2 are two views of the same account: same balance, same positions, switchable at any time. Degen mode runs on a separate engine with its own balance and positions.
+Funds are deposited once into a balance. Every order after that executes from the balance, with no wallet confirmation per trade.
 
 ## Documents
 
 | Document | Contents |
 | --- | --- |
-| [V1 and V2](docs/v1-and-v2.md) | Interfaces, order types, order options, position controls |
-| [Degen mode](docs/degen-mode.md) | 1000x on BTC and ETH, separate balance, liquidation distances |
-| [Margin and leverage](docs/margin-and-leverage.md) | Position size, initial and maintenance margin, tiers, cross and isolated |
-| [Liquidations](docs/liquidations.md) | Mark price, trigger, process, insurance fund |
-| [Funding](docs/funding.md) | How funding keeps perps close to spot |
+| [V1: liquidity pool](docs/v1-liquidity-pool.md) | Pool-based execution, oracle pricing, opening and managing positions |
+| [V2: order book](docs/v2-order-book.md) | Order matching, order types, order options, margin modes |
+| [Degen mode](docs/degen-mode.md) | Pool-based 1000x on BTC and ETH, separate balance, liquidation distances |
+| [Margin and leverage](docs/margin-and-leverage.md) | Position size, initial and maintenance margin |
+| [Liquidations](docs/liquidations.md) | Trigger price and process for each execution model |
+| [Funding](docs/funding.md) | Funding on the order book, holding costs on pools |
 
 ## Core formulas
 
@@ -58,15 +70,14 @@ V1 and V2 are two views of the same account: same balance, same positions, switc
 | --- | --- |
 | Position size (notional) | margin × leverage |
 | Initial margin | notional ÷ leverage |
-| Unrealized PnL, long | size × (mark price − entry price) |
-| Unrealized PnL, short | size × (entry price − mark price) |
-| Margin balance | collateral + realized PnL + unrealized PnL |
-| Margin ratio | maintenance margin ÷ margin balance |
-| Funding payment | notional × funding rate |
+| Unrealized PnL, long | size × (current price − entry price) |
+| Unrealized PnL, short | size × (entry price − current price) |
+| Margin balance | collateral + unrealized PnL |
+| Approximate move to liquidation | 1 ÷ leverage |
 
 ## Fees
 
-A DYXY trading fee is charged on notional size when a position is opened and when it is closed. Funding flows between traders and is not a DYXY fee. Users with a referral code pay 10% less.
+A DYXY trading fee is charged on notional size when a position is opened and when it is closed. Users with a referral code pay 10% less.
 
 ## License
 

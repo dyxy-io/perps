@@ -21,28 +21,11 @@ initial margin = notional ÷ leverage
 
 A $20,000 ETH position at 20x needs $1,000 of initial margin.
 
-## Maintenance margin and tiers
+## Maintenance margin
 
-Maintenance margin is the minimum margin required to keep a position open. Its rate depends on **position size**, not on the selected leverage.
+Maintenance margin is the minimum margin required to keep a position open. Larger positions can require a higher rate and allow lower maximum leverage. Exact limits per market are shown in the order panel.
 
-| Position size | Max leverage | Maintenance rate |
-| --- | --- | --- |
-| Smallest tier | Highest, up to 100x | Lowest |
-| Middle tiers | Lower | Higher |
-| Largest tier | Lowest | Highest |
-
-Exact tiers per market are shown in the order panel.
-
-## Margin ratio
-
-```
-margin balance = collateral + realized PnL + unrealized PnL
-margin ratio   = maintenance margin ÷ margin balance
-```
-
-Liquidation starts when the margin ratio reaches 100%. Keeping it below 80% leaves room for volatility.
-
-## Cross and isolated
+## Cross and isolated (V2)
 
 ```mermaid
 flowchart TB
@@ -57,7 +40,7 @@ flowchart TB
     end
 ```
 
-Cross is the default. Isolated margin can be topped up manually to move the liquidation price away.
+Cross and isolated margin are available on the order book (V2). Isolated margin can be topped up manually to move the liquidation price away. In V1 and Degen mode each position is backed by its own margin.
 
 ## Choosing leverage from the stop
 

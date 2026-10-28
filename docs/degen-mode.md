@@ -1,15 +1,16 @@
 # Degen mode
 
-Degen mode is a toggle inside V1. Switching it on moves BTC and ETH trading from the Aster engine to a dedicated engine on Hyperliquid (HyperEVM), with leverage up to **1000x**.
+Degen mode is a toggle inside V1. Switching it on moves BTC and ETH trading from the Aster engine to a separate engine on Hyperliquid (HyperEVM), with leverage up to **1000x**.
 
-| | V1 and V2 | Degen mode |
+Like V1, Degen mode is **pool-based**: positions are opened against a liquidity pool, not matched in an order book. Prices follow the Hyperliquid market.
+
+| | V1 | Degen mode |
 | --- | --- | --- |
+| Execution | Liquidity pool | Liquidity pool |
 | Engine | Aster | Hyperliquid (HyperEVM) |
 | Markets | All listed | BTC, ETH |
 | Max leverage | 100x | 1000x |
 | Balance | Perps balance | Degen balance |
-| Positions | Shared between V1 and V2 | Separate |
-| Interface | V1 and V2 | V1 only |
 
 ## Flow
 

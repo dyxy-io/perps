@@ -1,25 +1,25 @@
 # Liquidations
 
-A position is liquidated when its margin balance falls below the maintenance margin, which happens when the **mark price** reaches the **liquidation price**.
+A position is liquidated when its losses use up its margin down to the maintenance level. The trigger price depends on the execution model.
 
-## Mark price
+| | V1 and Degen mode (liquidity pool) | V2 (order book) |
+| --- | --- | --- |
+| Trigger | Oracle price reaches the liquidation price | Mark price reaches the liquidation price |
+| Process | Position closed at that price, remaining margin lost | Open orders cancelled, position closed against the book |
 
-The mark price is built from prices on several major spot exchanges and funding data. It drives unrealized PnL and liquidations, so a single unusual trade or a thin moment in the order book cannot liquidate a position on its own. The last traded price is used for realized PnL.
+## Mark price (V2)
 
-## Process
+The mark price is built from prices on several major exchanges. It drives unrealized PnL and liquidations on the order book, so a single unusual trade or a thin moment in the book cannot liquidate a position on its own.
+
+## Order book process (V2)
 
 ```mermaid
 flowchart TB
     A[Mark price reaches liquidation price] --> B[Cancel open orders in the affected margin]
-    B --> C[Reduce the position against the market]
-    C --> D{Margin sufficient now?}
-    D -- yes --> E[Liquidation stops]
-    D -- no --> F[Remaining position taken over at bankruptcy price<br/>by the insurance fund]
+    B --> C[Close the position against the book]
 ```
 
-A liquidation fee applies. Part of it funds the insurance fund, which absorbs losses from positions closed below their bankruptcy price.
-
-## Cross and isolated
+## Cross and isolated (V2)
 
 - **Isolated:** only the margin assigned to that position can be lost.
 - **Cross:** all cross positions share one margin balance, so a large loss in one lowers the buffer of all.
@@ -30,9 +30,13 @@ A liquidation fee applies. Part of it funds the insurance fund, which absorbs lo
 | --- | --- |
 | Lower leverage | Liquidation price further from entry |
 | Stop loss | Exit on the trader's terms before liquidation |
-| Add margin (isolated) | Moves the liquidation price away |
+| Add margin (isolated, V2) | Moves the liquidation price away |
 | Reduce size | Lowers the maintenance margin required |
 
-## Degen mode
+## Distance to liquidation
 
-Degen mode follows the same principle on its own engine. At up to 1000x leverage, liquidation can follow a move of a fraction of a percent.
+```
+adverse move ≈ 1 ÷ leverage
+```
+
+At 100x about 1%, at 1000x in Degen mode about 0.1%.

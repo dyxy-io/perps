@@ -1,6 +1,6 @@
 # Funding
 
-Perpetual futures have no expiry, so a periodic **funding payment** between longs and shorts keeps the perp price close to the spot price.
+Perpetual futures have no expiry. On the order book (V2), a periodic **funding payment** between longs and shorts keeps the perp price close to the spot price. On pool-based execution (V1 and Degen mode), holding costs, if any, are set by the pool engine and shown in the order panel before opening.
 
 ```mermaid
 flowchart LR
