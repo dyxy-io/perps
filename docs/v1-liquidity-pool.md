@@ -1,6 +1,6 @@
 # V1: liquidity pool
 
-In V1, traders don't trade with each other. Every position is opened against a **liquidity pool** on the Aster engine, which takes the other side. Entries and exits happen at the **oracle price**, an index price built from major exchanges.
+In V1, traders don't trade with each other. Every position is opened against a **liquidity pool** on the Hyperliquid engine (HyperEVM), which takes the other side. Entries and exits happen at the **oracle price**, an index price built from major exchanges.
 
 ```mermaid
 flowchart LR

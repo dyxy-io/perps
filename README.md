@@ -1,10 +1,13 @@
 <p align="center">
-  <img src="https://docs.dyxy.io/logo/dark.svg" alt="DYXY" height="48">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://docs.dyxy.io/logo/dark.svg">
+    <img src="https://docs.dyxy.io/logo/light.svg" alt="DYXY" height="48">
+  </picture>
 </p>
 
 # DYXY Perps
 
-How DYXY perpetual futures work: two execution engines on Aster, a liquidity pool (V1) and an order book (V2), both with up to 100x leverage, plus Degen mode, a liquidity pool on Hyperliquid with up to 1000x on BTC and ETH.
+How DYXY perpetual futures work. Everything runs on Hyperliquid (HyperEVM): a liquidity pool (V1) and an order book (V2), both with up to 100x leverage, plus Degen mode, a separate liquidity pool with up to 1000x on BTC and ETH.
 
 > This repository describes how the product works. It does not contain DYXY source code. User guide: [docs.dyxy.io/trade/perps](https://docs.dyxy.io/trade/perps/overview).
 
@@ -24,7 +27,7 @@ V1, V2 and Degen mode differ in **how a trade is executed**:
 | | V1 | V2 | Degen mode |
 | --- | --- | --- | --- |
 | Execution | Liquidity pool | Order book | Liquidity pool |
-| Engine | Aster | Aster | Hyperliquid (HyperEVM) |
+| Engine | Hyperliquid (HyperEVM) | Hyperliquid (HyperEVM) | Hyperliquid (HyperEVM) |
 | Markets | All listed | All listed | BTC and ETH |
 | Max leverage | 100x | 100x | 1000x |
 | Orders | Market, TP/SL | Market, limit, stop market, stop limit, TP/SL | Market, TP/SL |
@@ -38,11 +41,9 @@ flowchart LR
     W -- deposit / withdraw --> PB["Perps balance"]
     W -- deposit / withdraw --> DB["Degen balance"]
 
-    subgraph ASTER["Aster"]
+    subgraph HL["Hyperliquid (HyperEVM)"]
         V1["V1<br/>liquidity pool"]
         V2["V2<br/>order book"]
-    end
-    subgraph HL["Hyperliquid (HyperEVM)"]
         DG["Degen mode<br/>liquidity pool<br/>BTC · ETH · 1000x"]
     end
 

@@ -1,6 +1,6 @@
 # V2: order book
 
-In V2, orders go into an **order book** on the Aster engine. Buy orders (bids) and sell orders (asks) from all traders meet in the book, and a trade happens when they match. The counterparty is another trader.
+In V2, orders go into an **order book** on the Hyperliquid engine (HyperEVM). Buy orders (bids) and sell orders (asks) from all traders meet in the book, and a trade happens when they match. The counterparty is another trader.
 
 ```mermaid
 flowchart LR
