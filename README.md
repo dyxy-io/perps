@@ -7,7 +7,7 @@
 
 # DYXY Perps
 
-How DYXY perpetual futures work. Everything runs on Hyperliquid (HyperEVM): a liquidity pool (V1) and an order book (V2), both with up to 100x leverage, plus Degen mode, a separate liquidity pool with up to 1000x on BTC and ETH.
+How DYXY perpetuals work. Everything runs on Hyperliquid (HyperEVM): a liquidity pool (V1) and an order book (V2), both with up to 100x leverage, plus Degen mode, a separate liquidity pool with up to 1000x on BTC and ETH.
 
 > This repository describes how the product works. It does not contain DYXY source code. User guide: [docs.dyxy.io/trade/perps](https://docs.dyxy.io/trade/perps/overview).
 
