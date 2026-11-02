@@ -7,7 +7,7 @@
 
 # DYXY Perps
 
-How DYXY perpetuals work. Everything runs on Hyperliquid (HyperEVM): a liquidity pool (V1) and an order book (V2), both with up to 100x leverage, plus Degen mode, a separate liquidity pool with up to 1000x on BTC and ETH.
+How DYXY perpetuals work. Everything runs on HyperEVM: a liquidity pool (V1) and an order book (V2), both with up to 100x leverage, plus Degen mode, a separate liquidity pool with up to 1000x on BTC and ETH.
 
 > This repository describes how the product works. It does not contain DYXY source code. User guide: [docs.dyxy.io/trade/perps](https://docs.dyxy.io/trade/perps/overview).
 
@@ -27,7 +27,7 @@ V1, V2 and Degen mode differ in **how a trade is executed**:
 | | V1 | V2 | Degen mode |
 | --- | --- | --- | --- |
 | Execution | Liquidity pool | Order book | Liquidity pool |
-| Engine | Hyperliquid (HyperEVM) | Hyperliquid (HyperEVM) | Hyperliquid (HyperEVM) |
+| Engine | HyperEVM | HyperEVM | HyperEVM |
 | Markets | All listed | All listed | BTC and ETH |
 | Max leverage | 100x | 100x | 1000x |
 | Orders | Market, TP/SL | Market, limit, stop market, stop limit, TP/SL | Market, TP/SL |
@@ -41,7 +41,7 @@ flowchart LR
     W -- deposit / withdraw --> PB["Perps balance"]
     W -- deposit / withdraw --> DB["Degen balance"]
 
-    subgraph HL["Hyperliquid (HyperEVM)"]
+    subgraph HL["HyperEVM"]
         V1["V1<br/>liquidity pool"]
         V2["V2<br/>order book"]
         DG["Degen mode<br/>liquidity pool<br/>BTC · ETH · 1000x"]
