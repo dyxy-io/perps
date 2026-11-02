@@ -52,7 +52,7 @@ flowchart LR
     DB --> DG
 ```
 
-Funds are deposited once into a balance. Every order after that executes from the balance, with no wallet confirmation per trade.
+Funds are deposited into a balance, and trading runs from that balance.
 
 ## Documents
 
